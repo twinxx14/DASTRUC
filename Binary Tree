@@ -1,0 +1,189 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+class BST {
+    Node root;
+
+    BST() {
+        root = null;
+    }
+
+    // Insert data into BST
+    void insert(int data) {
+        root = insertRec(root, data);
+    }
+
+    Node insertRec(Node root, int data) {
+        if (root == null) {
+            root = new Node(data);
+            return root;
+        }
+
+        if (data < root.data) {
+            root.left = insertRec(root.left, data);
+        } else if (data > root.data) {
+            root.right = insertRec(root.right, data);
+        }
+
+        return root;
+    }
+
+    // Search data in BST
+    Node search(int data) {
+        return searchRec(root, data);
+    }
+
+    Node searchRec(Node root, int data) {
+        if (root == null || root.data == data) {
+            return root;
+        }
+
+        if (data < root.data) {
+            return searchRec(root.left, data);
+        }
+
+        return searchRec(root.right, data);
+    }
+
+    // Get node count in BST
+    int nodeCount() {
+        return countNodes(root);
+    }
+
+    int countNodes(Node root) {
+        if (root == null) {
+            return 0;
+        }
+
+        return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+
+    // Get height of BST
+    int height() {
+        return treeHeight(root);
+    }
+
+    int treeHeight(Node root) {
+        if (root == null) {
+            return -1;
+        }
+
+        int leftHeight = treeHeight(root.left);
+        int rightHeight = treeHeight(root.right);
+
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    // Traversal methods
+    void inorderTraversal() {
+        inorder(root);
+    }
+
+    void inorder(Node root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.data + " ");
+            inorder(root.right);
+        }
+    }
+
+    void preorderTraversal() {
+        preorder(root);
+    }
+
+    void preorder(Node root) {
+        if (root != null) {
+            System.out.print(root.data + " ");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+
+    void postorderTraversal() {
+        postorder(root);
+    }
+
+    void postorder(Node root) {
+        if (root != null) {
+            postorder(root.left);
+            postorder(root.right);
+            System.out.print(root.data + " ");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        BST bst = new BST();
+
+        char choice;
+        do {
+            System.out.println("\nBinary Search Tree Operations:");
+            System.out.println("[1] Insert Data");
+            System.out.println("[2] Search");
+            System.out.println("[3] Node Count");
+            System.out.println("[4] Height");
+            System.out.println("[5] Inorder Traversal");
+            System.out.println("[6] Preorder Traversal");
+            System.out.println("[7] Postorder Traversal");
+            System.out.println("[8] Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.next().charAt(0);
+
+            switch (choice) {
+                case '1':
+                    System.out.print("Enter data to insert: ");
+                    int data = scanner.nextInt();
+                    bst.insert(data);
+                    break;
+                case '2':
+                    System.out.print("Enter data to search: ");
+                    int searchData = scanner.nextInt();
+                    Node searchResult = bst.search(searchData);
+                    if (searchResult != null) {
+                        System.out.println("Data found: " + searchResult.data);
+                    } else {
+                        System.out.println("Data not found.");
+                    }
+                    break;
+                case '3':
+                    System.out.println("Node count: " + bst.nodeCount());
+                    break;
+                case '4':
+                    System.out.println("Tree height: " + bst.height());
+                    break;
+                case '5':
+                    System.out.print("Inorder traversal: ");
+                    bst.inorderTraversal();
+                    System.out.println();
+                    break;
+                case '6':
+                    System.out.print("Preorder traversal: ");
+                    bst.preorderTraversal();
+                    System.out.println();
+                    break;
+                case '7':
+                    System.out.print("Postorder traversal: ");
+                    bst.postorderTraversal();
+                    System.out.println();
+                    break;
+                case '8':
+                    System.out.println("Exiting program. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        } while (choice != '8');
+    }
+}
